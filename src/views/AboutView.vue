@@ -3,25 +3,13 @@
 		<h1>This is an about page</h1>
 
 		<div>
-			<el-input
-				v-model="name"
-				style="width: 300px; margin-right: 10px;"
-			></el-input>
+			<el-input v-model="name" style="width: 300px; margin-right: 10px;"></el-input>
 			<el-button @click="btnClick">按名称搜索</el-button>
 			<el-button @click="clearClick">重置</el-button>
 			<el-table :data="table">
-				<el-table-column
-					prop="data"
-					label="Data"
-				/>
-				<el-table-column
-					prop="name"
-					label="Name"
-				/>
-				<el-table-column
-					prop="address"
-					label="Address"
-				/>
+				<el-table-column prop="data" label="Data" />
+				<el-table-column prop="name" label="Name" />
+				<el-table-column prop="address" label="Address" />
 			</el-table>
 		</div>
 
@@ -32,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
+import { ref } from 'vue';
 interface User {
 	name: string;
 	id: number;
@@ -75,7 +63,7 @@ const btnClick = (evt: Event) => {
 		});
 	}
 };
-const clearClick = (evt: Event) => {
+const clearClick = () => {
 	table.value = tableData.value;
 	name.value = '';
 };

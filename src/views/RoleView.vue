@@ -1,44 +1,18 @@
 <template>
 	<div>
 		<div class="select-box">
-			<el-form
-				:inline="true"
-				class="demo-form-inline"
-			>
+			<el-form :inline="true" class="demo-form-inline">
 				<el-form-item>
-					<el-button
-						type="primary"
-						@click="addRole"
-					>添加角色</el-button>
+					<el-button type="primary" @click="addRole">添加角色</el-button>
 				</el-form-item>
 			</el-form>
 		</div>
-		<el-table
-			:data="list"
-			border
-			style="width: 100%"
-		>
-			<el-table-column
-				prop="roleId"
-				label="ID"
-				width="180"
-			/>
-			<el-table-column
-				prop="roleName"
-				label="角色名"
-				width="180"
-			/>
-			<el-table-column
-				prop="authority"
-				label="操作"
-			>
+		<el-table :data="list" border style="width: 100%">
+			<el-table-column prop="roleId" label="ID" width="180" />
+			<el-table-column prop="roleName" label="角色名" width="180" />
+			<el-table-column prop="authority" label="操作">
 				<template #default="scope">
-					<el-button
-						link
-						type="primary"
-						size="small"
-						@click="changeRole(scope.row)"
-					>
+					<el-button link type="primary" size="small" @click="changeRole(scope.row)">
 						修改权限
 					</el-button>
 				</template>
@@ -50,11 +24,13 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from 'vue';
 import { getRoleList } from '@/request/api';
-import { InitData } from '@/types/role';
+import { InitData, ListInt } from '@/types/role';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { useRouter } from 'vue-router';
 export default defineComponent({
 	setup() {
 		const data = reactive(new InitData());
+		const router = useRouter();
 		onMounted(() => {
 			getRoleList().then((res) => {
 				// console.log(res);
@@ -62,8 +38,15 @@ export default defineComponent({
 			});
 		});
 
-		const changeRole = (row: any) => {
-			console.log(row);
+		const changeRole = (row: ListInt) => {
+			// console.log(row);
+			router.push({
+				path: 'authority',
+				query: {
+					id: row.roleId,
+					authority: row.authority
+				}
+			})
 		};
 
 		const addRole = () => {
@@ -74,20 +57,20 @@ export default defineComponent({
 				.then(({ value }) => {
 					if (value) {
 						data.list.push({
-                            roleId: data.list.length + 1,
-                            roleName: value,
-                            authority: []
+							roleId: data.list.length + 1,
+							roleName: value,
+							authority: []
 						});
 					}
 					ElMessage({
 						type: 'success',
-						message: `Your email is:${value}`
+						message: `${value}角色添加成功`
 					});
 				})
 				.catch(() => {
 					ElMessage({
 						type: 'info',
-						message: 'Input canceled'
+						message: '取消操作'
 					});
 				});
 		};
@@ -97,5 +80,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
